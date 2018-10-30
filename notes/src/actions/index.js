@@ -15,6 +15,8 @@ export const LOGGING_IN = 'LOGGING_IN';
 export const LOGGED_IN = 'LOGGED_IN';
 export const AUTH_TRUE = 'AUTH_TRUE';
 export const AUTH_FALSE = 'AUTH_FALSE';
+export const LOGGING_OUT = 'LOGGING_OUT';
+export const LOGGED_OUT = 'LOGGED_OUT';
 
 // this will run before all component mountings
 export const authCheck = (jwt) => {
@@ -169,4 +171,19 @@ export const login = (user) => {
             dispatch({type: ERROR})
         })
     }
+}
+
+export const logout = () => {
+    return dispatch => {
+        dispatch({type: LOGGING_OUT});
+
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('user_id');
+        
+        dispatch({type: LOGGED_OUT});
+
+        window.location.reload();
+    }
+
+
 }

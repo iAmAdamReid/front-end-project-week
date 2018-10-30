@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import {fetchNotes, authCheck} from './actions/index';
+import {fetchNotes, authCheck, logout} from './actions/index';
 import { connect } from 'react-redux';
 import NoteList from './components/NoteList';
 import NoteForm from './components/NoteForm';
@@ -47,6 +47,12 @@ async componentWillMount(){
     })
   }
 
+  handleLogout = event => {
+    event.preventDefault();
+
+    this.props.logout();
+  }
+
   render() {
 
     let newNotes = this.props.notes;
@@ -70,6 +76,10 @@ async componentWillMount(){
       + Create New Note
       </div>
       </Link>
+
+      <div className = 'nav-link' onClick={this.handleLogout}>
+      Logout
+      </div>
 
       <div className = 'search-bar'>
       <input type = 'text' placeholder='Search...' value = {this.state.search} onChange = {this.handleSearchInput} ></input>
@@ -110,5 +120,6 @@ const mapStateToProps = state => {
 
 export default withRouter(connect(mapStateToProps, {
   fetchNotes,
-  authCheck
+  authCheck,
+  logout
 })(App));

@@ -49,15 +49,15 @@ class NoteForm extends React.Component {
         } else {
             content = this.state.content;
         }
-        /*******************************************************************************************/
-        /** SET DEFAULT USER ID TO 1 UNTIL LOGIN FUNCTION IS COMPLETE **/
-        /*******************************************************************************************/
+        // collect current user ID from localStorage
+        let user_id = localStorage.getItem('user_id');
+
         let newNote = {
             // rejoin unique tags array before sending resulting string to the database
             tags: uniqueTags.join(', '),
             title: noteTitle,
             content: content,
-            user_id: 1
+            user_id: user_id
         }
         this.props.addNote(newNote);
 

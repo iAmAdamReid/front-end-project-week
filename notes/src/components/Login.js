@@ -28,6 +28,8 @@ class Login extends React.Component {
         };
 
         this.props.login(user);
+
+        setTimeout(() => this.props.history.push('/'), 1500);
     }
 
 

@@ -64,12 +64,12 @@ class NoteEdit extends React.Component {
             noteContent = this.state.content;
         }
 
-        // SET USER ID TO 1 UNTIL LOGIN IS COMPLETE
+        let user_id = localStorage.getItem('user_id');
         let newNote = {
             tags: uniqueTags.join(', '),
             title: noteTitle,
             content: noteContent,
-            user_id: 1
+            user_id: user_id
         }
 
         this.props.editNote(this.props.currentNote.id, newNote);

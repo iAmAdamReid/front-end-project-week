@@ -1,6 +1,6 @@
 import React from 'react';
 import Note from './Note';
-import {fetchNotes} from '../actions/index';
+import {fetchNotes, authCheck} from '../actions/index';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 
@@ -8,9 +8,9 @@ import {connect} from 'react-redux';
 
 class NoteList extends React.Component{
 
-    componentDidMount(){
-        this.props.fetchNotes();
-      }
+   componentDidMount(){
+      this.props.fetchNotes();
+    }
 
     render(){
     return (
@@ -34,5 +34,6 @@ const mapStateToProps = () => {
   }
   
   export default withRouter(connect(mapStateToProps, {
-      fetchNotes
+      fetchNotes,
+      authCheck
   })(NoteList));
