@@ -187,3 +187,20 @@ export const logout = () => {
 
 
 }
+
+export const register = (user) => {
+    const sendUserRegistration = axios.post(`http://localhost:9000/api/users/register`, user);
+
+    return dispatch => {
+        dispatch({type: LOGGING_IN});
+
+        sendUserRegistration.then(res => {
+            localStorage.setItem('jwt', res.data.token);
+            localStorage.setItem('user_id', res.data.user_id);
+            dispatch({type: LOGGED_IN, payload: res.data})
+        }).catch(err => {
+            console.log(err);
+            dispatch({type: ERROR})
+        })
+    }
+}

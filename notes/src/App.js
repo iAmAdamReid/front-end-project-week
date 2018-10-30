@@ -9,6 +9,7 @@ import NoteEdit from './components/NoteEdit'
 import NoteDetails from './components/NoteDetails';
 import NoteTags from './components/NoteTags';
 import Login from './components/Login';
+import Register from './components/Register';
 
 
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
@@ -16,15 +17,6 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom';
 
 
 class App extends Component {
-
-async componentWillMount(){
-    const jwt = localStorage.getItem('jwt');
-    await this.props.authCheck(jwt);
-    if(!this.props.isLoggedIn){
-      this.props.history.push('/login')
-    }
-  }
-
 
   constructor(props){
     super(props);
@@ -96,6 +88,8 @@ async componentWillMount(){
           <Route exact path='/notes/:id' render={(props) => <NoteDetails {...props} notes={this.props.notes} />} />
           <Route exact path='/notes/edit/:id' render={(props) => <NoteEdit {...props} notes = {this.props.notes} />} />
           <Route exact path = '/notes/tags/:tag' render={(props) => <NoteTags {...props} notes={this.props.notes} />} />
+          <Route exact path = '/register' component = {Register} />
+
         </Switch>
 
       </div>
