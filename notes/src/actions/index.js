@@ -11,11 +11,34 @@ export const EDITING = 'EDITING';
 export const EDITED = 'EDITED';
 export const FETCHING_SINGLE = 'FETCHING_SINGLE';
 export const FETCHED_SINGLE = 'FETCHED_SINGLE';
+export const LOGGING_IN = 'LOGGING_IN';
+export const LOGGED_IN = 'LOGGED_IN';
+export const AUTH_TRUE = 'AUTH_TRUE';
+export const AUTH_FALSE = 'AUTH_FALSE';
+
+// this will run before all component mountings
+export const authCheck = (jwt) => {
+    if(jwt){
+        return dispatch => {
+            dispatch({type: AUTH_TRUE})
+        }
+    } else {
+        return dispatch => {
+            dispatch({type: AUTH_FALSE})
+        }
+    }
+}
 
 
 export const fetchNotes = () => {
-
-    const fetchAllRequest = axios.get(`http://localhost:9000/api/notes`);
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+    const endpoint = `http://localhost:9000/api/notes`;
+    const fetchAllRequest = axios.get(endpoint, options);
 
     return dispatch => {
         dispatch({type: FETCHING})
@@ -30,7 +53,16 @@ export const fetchNotes = () => {
 }
 
 export const addNote = note => {
-    const addNoteRequest = axios.post(`http://localhost:9000/api/notes`, note);
+
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+    const endpoint = `http://localhost:9000/api/notes`;
+    
+    const addNoteRequest = axios.post(endpoint, note, options);
 
     return dispatch => {
 
@@ -49,7 +81,15 @@ export const addNote = note => {
 
 export const deleteNote = id => {
 
-    const deleteNoteRequest = axios.delete(`http://localhost:9000/api/notes/${id}`);
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+    const endpoint = `http://localhost:9000/api/notes/${id}`;
+
+    const deleteNoteRequest = axios.delete(endpoint, options);
 
     return dispatch => {
 
@@ -66,7 +106,15 @@ export const deleteNote = id => {
 
 export const editNote = (id, newNote) => {
 
-    const editNoteRequest = axios.put(`http://localhost:9000/api/notes/${id}`, newNote);
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+    const endpoint = `http://localhost:9000/api/notes/${id}`;
+
+    const editNoteRequest = axios.put(endpoint, newNote, options);
 
     return dispatch => {
 
@@ -82,13 +130,40 @@ export const editNote = (id, newNote) => {
 }
 
 export const fetchSingleNote = (id) => {
-    const fetchSingleRequest = axios.get(`http://localhost:9000/api/notes/${id}`);
+
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+    const endpoint = `http://localhost:9000/api/notes/${id}`;
+
+
+    const fetchSingleRequest = axios.get(endpoint, options);
 
     return dispatch => {
         dispatch({type: FETCHING_SINGLE});
 
         fetchSingleRequest.then(res => {
             dispatch({type: FETCHED_SINGLE, payload: res.data})
+        }).catch(err => {
+            console.log(err);
+            dispatch({type: ERROR})
+        })
+    }
+}
+
+export const login = (user) => {
+    const sendUserLogin = axios.post(`http://localhost:9000/api/users/login`, user);
+
+    return dispatch => {
+        dispatch({type: LOGGING_IN});
+
+        sendUserLogin.then(res => {
+            localStorage.setItem('jwt', res.data.token);
+            localStorage.setItem('user_id', res.data.user_id);
+            dispatch({type: LOGGED_IN, payload: res.data})
         }).catch(err => {
             console.log(err);
             dispatch({type: ERROR})

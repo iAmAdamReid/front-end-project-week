@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import {fetchNotes} from './actions/index';
+import {fetchNotes, authCheck} from './actions/index';
 import { connect } from 'react-redux';
 import NoteList from './components/NoteList';
 import NoteForm from './components/NoteForm';
 import NoteEdit from './components/NoteEdit'
 import NoteDetails from './components/NoteDetails';
 import NoteTags from './components/NoteTags';
+import Login from './components/Login';
+
 
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
 
 
 
 class App extends Component {
+
+async componentWillMount(){
+    const jwt = localStorage.getItem('jwt');
+    await this.props.authCheck(jwt);
+    if(!this.props.isLoggedIn){
+      this.props.history.push('/login')
+    }
+  }
+
+
   constructor(props){
     super(props);
     this.state = {
@@ -68,6 +80,8 @@ class App extends Component {
         <Switch>
           <Route exact path = '/'
           render={(props) => <NoteList {...props} notes={newNotes} />} />
+
+          <Route exact path = '/login' component = {Login} />
           <Route exact path = '/form' component={NoteForm} />
           <Route exact path='/notes/:id' render={(props) => <NoteDetails {...props} notes={this.props.notes} />} />
           <Route exact path='/notes/edit/:id' render={(props) => <NoteEdit {...props} notes = {this.props.notes} />} />
@@ -87,10 +101,14 @@ const mapStateToProps = state => {
     notes: state.notes,
     noteDeleted: state.noteDeleted,
     notesFetched: state.notesFetched,
-    needsRefresh: state.needsRefresh
+    needsRefresh: state.needsRefresh,
+    isLoggedIn: state.isLoggedIn,
+    currentUser: state.currentUser,
+    userToken: state.userToken
   }
 }
 
 export default withRouter(connect(mapStateToProps, {
-  fetchNotes
+  fetchNotes,
+  authCheck
 })(App));

@@ -1,4 +1,4 @@
-import {FETCHING, FETCHED, POSTING, POSTED, FETCHING_SINGLE, FETCHED_SINGLE, EDITING, EDITED, DELETING, DELETED, ERROR} from '../actions/index';
+import {FETCHING, FETCHED, POSTING, POSTED, FETCHING_SINGLE, FETCHED_SINGLE, EDITING, EDITED, DELETING, DELETED, ERROR, LOGGING_IN, LOGGED_IN, AUTH_TRUE, AUTH_FALSE} from '../actions/index';
 
 const initialState = {
     fetchingNotes: false,
@@ -14,7 +14,12 @@ const initialState = {
     fetchingSingle: false,
     singleFetched: false,
     currentNote: {},
-    needsRefresh: false
+    needsRefresh: false,
+    isLoggingIn: false,
+    isLoggedIn: false,
+    userToken: '',
+    currentUserName: 'Guest',
+    currentUserId: 0
 }
 
 export const rootReducer = (state = initialState, action) => {
@@ -90,6 +95,30 @@ export const rootReducer = (state = initialState, action) => {
                 fetchingSingle: false,
                 singleFetched: true,
                 currentNote: action.payload
+            })
+
+        case LOGGING_IN:
+            return Object.assign({}, state, {
+                isLoggingIn: true
+            })
+
+        case LOGGED_IN:
+            return Object.assign({}, state, {
+                isLoggingIn: false,
+                isLoggedIn: true,
+                userToken: action.payload.token,
+                currentUserName: action.payload.username,
+                currentUserId: action.payload.user_id
+            })
+
+        case AUTH_TRUE:
+            return Object.assign({}, state, {
+                isLoggedIn: true
+            })
+
+        case AUTH_FALSE:
+            return Object.assign({}, state, {
+                isLoggedIn: false
             })
 
         default:
