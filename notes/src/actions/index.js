@@ -22,14 +22,24 @@ export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 
 // this will run before all component mountings
 export const authCheck = (jwt) => {
-    if(jwt){
-        return dispatch => {
-            dispatch({type: AUTH_TRUE})
-        }
-    } else {
-        return dispatch => {
-            dispatch({type: AUTH_FALSE})
-        }
+
+    const options = {
+        headers: {
+            Authorization: jwt,
+        },
+    }
+
+    // test the passed jwt using a get call
+    const result = axios.get(`http://localhost:9000/api/notes`, options);
+
+    return dispatch => {
+        result.then(res => {
+            if(res.status === 200){
+                dispatch({type: AUTH_TRUE})
+            } else {
+                dispatch({type: AUTH_FALSE});
+            }
+        })
     }
 }
 
@@ -218,8 +228,6 @@ export const search = (notes, term) => {
             dispatch({type: CLEAR_SEARCH, payload: notes})
         }
     }
-
-    console.log(term);
 
     return dispatch => {
         dispatch({type: SEARCH, payload: newNotes})

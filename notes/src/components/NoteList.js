@@ -9,7 +9,9 @@ import {connect} from 'react-redux';
 class NoteList extends React.Component{
 
    componentDidMount(){
-      this.props.fetchNotes();
+       if(this.props.isLoggedIn){
+        this.props.fetchNotes();
+       }
     }
 
     render(){
@@ -27,9 +29,9 @@ class NoteList extends React.Component{
 }
 }
 
-const mapStateToProps = () => {
+const mapStateToProps = state => {
     return {
-        
+        isLoggedIn: state.isLoggedIn
     }
   }
   

@@ -19,9 +19,14 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom';
 
 class App extends Component {
 
-
   componentDidMount(){
-    this.props.authCheck();
+    // check to see if user is authorized
+    const jwt = localStorage.getItem('jwt');
+    this.props.authCheck(jwt);
+
+    if(!this.props.isLoggedIn){
+      this.props.history.replace('/login')
+    }
   }
 
   constructor(props){

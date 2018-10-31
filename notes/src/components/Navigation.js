@@ -6,10 +6,6 @@ import {authCheck, logout, search} from '../actions/index';
 
 class Navigation extends React.Component {
 
-    componentDidMount(){
-        this.props.authCheck();
-    }
-
 constructor(props){
     super(props)
 
