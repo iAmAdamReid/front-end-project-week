@@ -17,6 +17,8 @@ export const AUTH_TRUE = 'AUTH_TRUE';
 export const AUTH_FALSE = 'AUTH_FALSE';
 export const LOGGING_OUT = 'LOGGING_OUT';
 export const LOGGED_OUT = 'LOGGED_OUT';
+export const SEARCH = 'SEARCH';
+export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 
 // this will run before all component mountings
 export const authCheck = (jwt) => {
@@ -185,7 +187,6 @@ export const logout = () => {
         window.location.reload();
     }
 
-
 }
 
 export const register = (user) => {
@@ -202,5 +203,25 @@ export const register = (user) => {
             console.log(err);
             dispatch({type: ERROR})
         })
+    }
+}
+
+export const search = (notes, term) => {
+    // pass the notes and the search term
+    // filter notes according to search term
+    // pass the remaining notes back to state
+    let newNotes;
+    if(term.length > 0){
+        newNotes = notes.filter(note => note.title.includes(term) || note.content.includes(term) || note.tags.includes(term))
+    } else if(!term || term.length === 0 || term === ''){
+        return dispatch => {
+            dispatch({type: CLEAR_SEARCH, payload: notes})
+        }
+    }
+
+    console.log(term);
+
+    return dispatch => {
+        dispatch({type: SEARCH, payload: newNotes})
     }
 }

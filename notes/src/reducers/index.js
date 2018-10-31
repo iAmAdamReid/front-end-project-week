@@ -16,6 +16,8 @@ import {
     AUTH_FALSE,
     LOGGING_OUT,
     LOGGED_OUT,
+    SEARCH,
+    CLEAR_SEARCH
 } from '../actions/index';
 
 const initialState = {
@@ -25,6 +27,7 @@ const initialState = {
     notePosted: false,
     error: null,
     notes: [],
+    searchNotes: [],
     deletingNote: false,
     noteDeleted: false,
     editingNote: false,
@@ -39,7 +42,8 @@ const initialState = {
     currentUserName: 'Guest',
     currentUserId: 0,
     loggingOut: false,
-    loggedOut: true
+    loggedOut: true,
+    isSearch: false,
 }
 
 export const rootReducer = (state = initialState, action) => {
@@ -154,6 +158,18 @@ export const rootReducer = (state = initialState, action) => {
                 userToken: '',
                 currentUserName: 'Guest',
                 currentUserId: 0
+            })
+
+        case SEARCH:
+            return Object.assign({}, state, {
+                searchNotes: action.payload,
+                isSearch: true
+            })
+
+        case CLEAR_SEARCH: 
+            return Object.assign({}, state, {
+                isSearch: false,
+                searchNotes: action.payload
             })
 
         default:

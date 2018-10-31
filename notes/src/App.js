@@ -10,6 +10,7 @@ import NoteDetails from './components/NoteDetails';
 import NoteTags from './components/NoteTags';
 import Login from './components/Login';
 import Register from './components/Register';
+import Navigation from './components/Navigation';
 
 
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
@@ -18,70 +19,37 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom';
 
 class App extends Component {
 
+
+  componentDidMount(){
+    this.props.authCheck();
+  }
+
   constructor(props){
     super(props);
-    this.state = {
-      search: '',
-    }
-  }
-
-  handleSearchInput = event => {
-    event.preventDefault();
-    this.setState({
-      ...this.state,
-      search: event.target.value
-    })
-  }
-
-  clearSearch = () => {
-    this.setState({
-      search: ''
-    })
-  }
-
-  handleLogout = event => {
-    event.preventDefault();
-
-    this.props.logout();
   }
 
   render() {
 
-    let newNotes = this.props.notes;
-    if(this.state.search.length > 0){
-      newNotes = this.props.notes.filter(note => note.title.includes(this.state.search) || note.content.includes(this.state.search) || note.tags.includes(this.state.search))
-      }
+
+    // if search, pass search notes
+    let currentNotes;
+    if(this.props.isSearch){
+      currentNotes = this.props.searchNotes;
+    } else {
+    // else pass all notes
+      currentNotes = this.props.notes;
+    }
+
 
     return (
      <div className='App'>
 
-      <div className = 'navigation'>
-      <h1>Lambda Notes</h1>
-      <Link to ='/'>
-      <div className = 'nav-link' onClick={this.clearSearch}>
-      View Your Notes
-      </div>
-      </Link>
-
-      <Link to='/form'>
-      <div className = 'nav-link'>
-      + Create New Note
-      </div>
-      </Link>
-
-      <div className = 'nav-link' onClick={this.handleLogout}>
-      Logout
-      </div>
-
-      <div className = 'search-bar'>
-      <input type = 'text' placeholder='Search...' value = {this.state.search} onChange = {this.handleSearchInput} ></input>
-      </div>
-      </div>
-
+     <Navigation />
+     
       <div className = 'application'>
         <Switch>
           <Route exact path = '/'
-          render={(props) => <NoteList {...props} notes={newNotes} />} />
+          render={(props) => <NoteList {...props} notes={currentNotes} />} />
 
           <Route exact path = '/login' component = {Login} />
           <Route exact path = '/form' component={NoteForm} />
@@ -91,7 +59,6 @@ class App extends Component {
           <Route exact path = '/register' component = {Register} />
 
         </Switch>
-
       </div>
       </div>
 
@@ -108,7 +75,9 @@ const mapStateToProps = state => {
     needsRefresh: state.needsRefresh,
     isLoggedIn: state.isLoggedIn,
     currentUser: state.currentUser,
-    userToken: state.userToken
+    userToken: state.userToken,
+    isSearch: state.isSearch,
+    searchNotes: state.searchNotes
   }
 }
 
