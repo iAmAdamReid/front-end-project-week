@@ -19,6 +19,8 @@ export const LOGGING_OUT = 'LOGGING_OUT';
 export const LOGGED_OUT = 'LOGGED_OUT';
 export const SEARCH = 'SEARCH';
 export const CLEAR_SEARCH = 'CLEAR_SEARCH';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 
 // this will run before all component mountings
 export const authCheck = (jwt) => {
@@ -30,7 +32,7 @@ export const authCheck = (jwt) => {
     }
 
     // test the passed jwt using a get call
-    const result = axios.get(`http://localhost:9000/api/notes`, options);
+    const result = axios.get(`http://localhost:9000/api/authorize`, options);
 
     return dispatch => {
         result.then(res => {
@@ -180,7 +182,7 @@ export const login = (user) => {
             dispatch({type: LOGGED_IN, payload: res.data})
         }).catch(err => {
             console.log(err);
-            dispatch({type: ERROR})
+            dispatch({type: LOGIN_FAILURE})
         })
     }
 }
@@ -206,12 +208,16 @@ export const register = (user) => {
         dispatch({type: LOGGING_IN});
 
         sendUserRegistration.then(res => {
-            localStorage.setItem('jwt', res.data.token);
-            localStorage.setItem('user_id', res.data.user_id);
-            dispatch({type: LOGGED_IN, payload: res.data})
+            if(res.status === 201){
+                localStorage.setItem('jwt', res.data.token);
+                localStorage.setItem('user_id', res.data.user_id);
+                dispatch({type: LOGGED_IN, payload: res.data})
+            } else {
+                dispatch({type: REGISTER_FAILURE})
+            }
         }).catch(err => {
             console.log(err);
-            dispatch({type: ERROR})
+            dispatch({type: REGISTER_FAILURE})
         })
     }
 }

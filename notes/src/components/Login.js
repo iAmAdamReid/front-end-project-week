@@ -5,6 +5,15 @@ import axios from 'axios';
 import {login} from '../actions/index'
 
 class Login extends React.Component {
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.isLoggedIn){
+            this.props.history.replace('/')
+        } else if(nextProps.loginFailure){
+            window.alert('Bad User Credentials')
+        }
+    }
+
     constructor(props){
         super(props);
         this.state = {
@@ -28,8 +37,6 @@ class Login extends React.Component {
         };
 
         this.props.login(user);
-
-        setTimeout(() => this.props.history.push('/'), 1500);
     }
 
 
@@ -54,7 +61,8 @@ const mapStateToProps = state => {
     return {
         currentUser: state.currentUser,
         userToken: state.userToken,
-        isLoggedIn: state.isLoggedIn
+        isLoggedIn: state.isLoggedIn,
+        loginFailure: state.loginFailure
     }
 }
 

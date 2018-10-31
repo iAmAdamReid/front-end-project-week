@@ -5,6 +5,15 @@ import axios from 'axios';
 import {register} from '../actions/index'
 
 class Register extends React.Component {
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.isLoggedIn){
+            this.props.history.replace('/');
+        } else if(nextProps.registerFailure){
+            window.alert('Username already exists. Please use a different username.');
+        }
+    }
+
     constructor(props){
         super(props);
         this.state = {
@@ -28,8 +37,6 @@ class Register extends React.Component {
         };
 
         this.props.register(user);
-
-        setTimeout(() => this.props.history.push('/'), 1500);
     }
 
 
@@ -52,7 +59,8 @@ class Register extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.isLoggedIn
+        isLoggedIn: state.isLoggedIn,
+        registerFailure: state.registerFailure
     }
 }
 

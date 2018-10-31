@@ -17,7 +17,9 @@ import {
     LOGGING_OUT,
     LOGGED_OUT,
     SEARCH,
-    CLEAR_SEARCH
+    CLEAR_SEARCH,
+    LOGIN_FAILURE,
+    REGISTER_FAILURE
 } from '../actions/index';
 
 const initialState = {
@@ -44,6 +46,8 @@ const initialState = {
     loggingOut: false,
     loggedOut: true,
     isSearch: false,
+    loginFailure: false,
+    registerFailure: false
 }
 
 export const rootReducer = (state = initialState, action) => {
@@ -123,16 +127,31 @@ export const rootReducer = (state = initialState, action) => {
 
         case LOGGING_IN:
             return Object.assign({}, state, {
-                isLoggingIn: true
+                isLoggingIn: true,
+                loginFailure: false
             })
 
         case LOGGED_IN:
             return Object.assign({}, state, {
                 isLoggingIn: false,
                 isLoggedIn: true,
+                loginFailure: false,
+                registerFailure: false,
                 userToken: action.payload.token,
                 currentUserName: action.payload.username,
                 currentUserId: action.payload.user_id
+            })
+
+        case LOGIN_FAILURE:
+            return Object.assign({}, state, {
+                loginFailure: true,
+                isLoggingIn: false
+            })
+
+        case REGISTER_FAILURE:
+            return Object.assign({}, state, {
+                registerFailure: true,
+                isLoggingIn: false,
             })
 
         case AUTH_TRUE:
