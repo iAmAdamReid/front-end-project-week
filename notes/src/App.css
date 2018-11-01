@@ -431,3 +431,46 @@ html, body {
   color: white;
   cursor: pointer;
 }
+
+/************************************************************************************/
+/* MY ACCOUNT */
+/************************************************************************************/
+
+.user-details h1 {
+  text-align: center;
+}
+
+.account button {
+  width: 50%;
+  border: 0px;
+  padding: 10px;
+  outline: none;
+  border-radius: 10px;
+  background: #24b8bd;
+  color: white;
+  cursor: pointer;
+  margin: 10px auto;
+}
+
+.change-username form {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 50%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.change-password form {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 50%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.account input {
+  padding: 10px;
+  border: 0px;
+  border-radius: 10px;
+  margin: 10px;
+}

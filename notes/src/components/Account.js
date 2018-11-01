@@ -47,11 +47,34 @@ class Account extends React.Component {
             username: this.state.username
         }
 
-        this.props.changeUserName(id, newName);
+        if(!newName.username || newName.username.length < 3){
+            window.alert('You must input a username with more than 3 characters!')
+        } else {
+            if(window.confirm(`Your new username will be ${newName.username}. Is this okay?`)){
+                this.props.changeUserName(id, newName);
+            }
+        }
     }
 
     handlePasswordChange = event => {
         // call the password change action
+        event.preventDefault();
+        const id = localStorage.getItem('user_id');
+        const newPassword = {
+            password: this.state.password1
+        }
+
+        if(this.state.password1 !== this.state.password2){
+            window.alert('Both of your password inputs must match!');
+        } else if(this.state.password1.length < 8 || this.state.password2.length < 8){
+            window.alert('Your password must be at least 8 characters!')
+        } else {
+            if(this.state.password1 === this.state.password2){
+                if(window.confirm(`Your password will change on your next login. Proceed?`)){
+                    this.props.changeUserPassword(id, newPassword);
+                }
+            }
+        } 
     }
 
     render(){
@@ -67,18 +90,19 @@ class Account extends React.Component {
 
             <div className = 'change-username'>
             <form onSubmit = {this.handleNameChange}>
-                Change Username
+                <h3>Change Username</h3>
                 <input type = 'text' name='username' onChange = {this.handleInput} value = {this.state.username}></input>
                 <button type = 'submit'>Submit</button>
             </form>
             </div>
 
             <div className = 'change-password'>
-            Change Password
-                <form>
+                <form onSubmit = {this.handlePasswordChange}>
+                <h3>Change Password</h3>
                     Please type your new password into each field.
                     <input type = 'password' name = 'password1' onChange = {this.handleInput}></input>
                     <input type = 'password' name = 'password2' onChange = {this.handleInput}></input>
+                    <button type='submit'>Submit</button>
                 </form>
             </div>
 
