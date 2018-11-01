@@ -21,7 +21,12 @@ export const SEARCH = 'SEARCH';
 export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const REGISTER_FAILURE = 'REGISTER_FAILURE';
-
+export const FETCHING_USER = 'FETCHING_USER';
+export const FETCHED_USER = 'FETCHED_USER'
+export const CHANGING_NAME = 'CHANGING_NAME';
+export const CHANGING_PASSWORD = 'CHANGING_PASSWORD';
+export const PASSWORD_CHANGED = 'PASSWORD_CHANGED';
+export const NAME_CHANGED = 'NAME_CHANGED';
 // this will run before all component mountings
 export const authCheck = (jwt) => {
 
@@ -237,5 +242,70 @@ export const search = (notes, term) => {
 
     return dispatch => {
         dispatch({type: SEARCH, payload: newNotes})
+    }
+}
+
+export const getUserInfo = (id) => {
+    //axios call for user information
+
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+
+    return dispatch => {
+        dispatch({type: FETCHING_USER});
+    
+    axios.get(`http://localhost:9000/api/users/${id}`, options).then(res => {
+        dispatch({type: FETCHED_USER, payload: res.data});
+    })
+    .catch(err=> {
+        console.log(err);
+        dispatch({type: ERROR})
+    })
+}
+}
+
+export const changeUserName = (id, newName) => {
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+
+    return dispatch => {
+        dispatch({type: CHANGING_NAME});
+    
+    axios.put(`http://localhost:9000/api/users/${id}`, newName, options).then(res => {
+        dispatch({type: NAME_CHANGED});
+    })
+    .catch(err => {
+        console.log(err);
+        dispatch({type: ERROR})
+    })
+}
+}
+
+export const changeUserPassword = (id, newPassword) => {
+    const token = localStorage.getItem('jwt');
+    const options = {
+        headers: {
+            Authorization: token,
+        },
+    }
+
+    return dispatch => {
+        dispatch({type: CHANGING_PASSWORD});
+
+        axios.put(`http://localhost:9000/api/users/${id}`, newPassword, options).then(res => {
+            dispatch({type: PASSWORD_CHANGED})
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({type: ERROR})
+        })
     }
 }

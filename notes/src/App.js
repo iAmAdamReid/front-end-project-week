@@ -11,6 +11,7 @@ import NoteTags from './components/NoteTags';
 import Login from './components/Login';
 import Register from './components/Register';
 import Navigation from './components/Navigation';
+import Account from './components/Account';
 
 
 import { Switch, Route, Link, withRouter } from 'react-router-dom';
@@ -48,9 +49,9 @@ class App extends Component {
 
     return (
      <div className='App'>
-
+      <div className = 'nav-container'>
      <Navigation />
-     
+     </div>
       <div className = 'application'>
         <Switch>
           <Route exact path = '/'
@@ -62,11 +63,11 @@ class App extends Component {
           <Route exact path='/notes/edit/:id' render={(props) => <NoteEdit {...props} notes = {this.props.notes} />} />
           <Route exact path = '/notes/tags/:tag' render={(props) => <NoteTags {...props} notes={this.props.notes} />} />
           <Route exact path = '/register' component = {Register} />
+          <Route exact path = '/account' component = {Account}></Route>
 
         </Switch>
       </div>
-      </div>
-
+  </div>
 
     );
   }

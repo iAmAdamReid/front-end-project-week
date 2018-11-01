@@ -41,37 +41,47 @@ render(){
     if(!this.props.isLoggedIn){
         return (
             <div className = 'navigation'>
-            <h1>Lambda Notes</h1>
+            
       <Link to ='/login'>
       <div className = 'nav-link'>
       Login
       </div>
-      </Link>      
+      </Link>
+
+      
+    <Link to = '/register'><div className = 'nav-link'>Register</div></Link>
+      
             </div>
         )
     } else {
     return (
         <div className = 'navigation'>
-      <h1>Lambda Notes</h1>
+      
       <Link to ='/'>
       <div className = 'nav-link' onClick={this.clearSearch}>
-      View Your Notes
+      Home
       </div>
       </Link>
 
       <Link to='/form'>
       <div className = 'nav-link'>
-      + Create New Note
+      Add Note
       </div>
       </Link>
+
+
+      <Link to = '/account'><div className = 'nav-link'>
+      My Account
+      </div></Link>
 
       <div className = 'nav-link' onClick={this.handleLogout}>
       Logout
       </div>
 
       <div className = 'search-bar'>
-      <input type = 'text' placeholder='Search...' value = {this.state.search} onChange = {this.handleSearchInput} ></input>
+      <input type = 'search' placeholder='Search...' value = {this.state.search} onChange = {this.handleSearchInput} ></input>
       </div>
+      
       </div>
     )
     }

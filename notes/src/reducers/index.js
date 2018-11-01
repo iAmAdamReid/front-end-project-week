@@ -19,7 +19,13 @@ import {
     SEARCH,
     CLEAR_SEARCH,
     LOGIN_FAILURE,
-    REGISTER_FAILURE
+    REGISTER_FAILURE,
+    FETCHING_USER,
+    FETCHED_USER,
+    CHANGING_NAME,
+    CHANGING_PASSWORD,
+    NAME_CHANGED,
+    PASSWORD_CHANGED
 } from '../actions/index';
 
 const initialState = {
@@ -47,7 +53,14 @@ const initialState = {
     loggedOut: true,
     isSearch: false,
     loginFailure: false,
-    registerFailure: false
+    registerFailure: false,
+    fetchingUser: false,
+    fetchedUser: false,
+    currentUser: {},
+    changingName: false,
+    nameChanged: false,
+    changingPassword: false,
+    passwordChanged: false
 }
 
 export const rootReducer = (state = initialState, action) => {
@@ -190,6 +203,40 @@ export const rootReducer = (state = initialState, action) => {
                 isSearch: false,
                 searchNotes: action.payload
             })
+
+        case FETCHING_USER:
+            return Object.assign({}, state, {
+                fetchingUser: true
+            })
+
+        case FETCHED_USER:
+            return Object.assign({}, state, {
+                fetchingUser: false,
+                fetchedUser: true,
+                currentUser: action.payload
+            })
+
+        case CHANGING_NAME:
+        return Object.assign({}, state, {
+            changingName: true
+        })
+
+        case NAME_CHANGED:
+        return Object.assign({}, state, {
+            changingName: false,
+            nameChanged: true
+        })
+
+        case CHANGING_PASSWORD:
+        return Object.assign({}, state, {
+            changingPassword: true
+        })
+
+        case PASSWORD_CHANGED:
+        return Object.assign({}, state, {
+            passwordChanged: true,
+            changingPassword: false
+        })
 
         default:
             return state;
